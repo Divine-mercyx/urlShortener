@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 app.use("/api/v1", userRoute)
-app.use("/api/v1/url", urlRoute)
+app.use("/", urlRoute)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

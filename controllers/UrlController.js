@@ -22,8 +22,8 @@ export const shortenUrl = async (req, res) => {
 
 export const visitUrl = async (req, res) => {
     try {
-        const { shortUrl, id } = req.params;
-        const url = await Url.findOne({ shortUrl: shortUrl, user: id })
+        const { shortUrl } = req.params;
+        const url = await Url.findOne({ shortUrl: shortUrl })
         if (url) return res.redirect(url.originalUrl)
     } catch (err) {
         res.status(400).send({ error: err });

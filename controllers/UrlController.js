@@ -3,14 +3,14 @@ import Url from "../models/urlModel.js";
 export const shortenUrl = async (req, res) => {
     try {
         const { originalUrl, shortUrl, user } = req.body;
-        if (originalUrl.slice(0, 7) === "https://") {
-
+        const existingUrl = await Url.findOne({shortUrl: shortUrl, user: user});
+        if (existingUrl) return res.status(400).send({message: "URL already exists"});
+        if (originalUrl.startsWith("http://") || originalUrl.startsWith("https://") || originalUrl.startsWith("www.")) {
             const url = new Url({
                 originalUrl,
                 shortUrl,
                 user
             });
-
             await url.save();
             return res.status(201).json({originalUrl, shortUrl});
         }
@@ -22,12 +22,9 @@ export const shortenUrl = async (req, res) => {
 
 export const visitUrl = async (req, res) => {
     try {
-        const { shortUrl } = req.params;
-        const url = await Url.findOne({ shortUrl: shortUrl })
-        if (url) {
-            console.log(url.originalUrl);
-            return res.redirect(url.originalUrl)
-        }
+        const { shortUrl, id } = req.params;
+        const url = await Url.findOne({ shortUrl: shortUrl, user: id })
+        if (url) return res.redirect(url.originalUrl)
     } catch (err) {
         res.status(400).send({ error: err });
     }

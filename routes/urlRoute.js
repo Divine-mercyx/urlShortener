@@ -3,6 +3,6 @@ import {shortenUrl, visitUrl} from "../controllers/UrlController.js";
 const router = express.Router();
 
 router.post("/shorten", shortenUrl)
-router.get("/visit/:shortUrl", visitUrl)
+router.get("/visit/:shortUrl/:id", visitUrl)
 
 export default router;
